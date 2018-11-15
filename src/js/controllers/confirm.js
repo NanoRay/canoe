@@ -286,23 +286,6 @@ angular.module('canoeApp.controllers').controller('confirmController', function 
     getTxp(lodash.clone(tx), account, false, function (err, txp) {
       ongoingProcess.set('creatingTx', false, onSendStatusChange)
       if (err) return
-
-      // confirm txs for more than 20 usd, if not spending/touchid is enabled
-      function confirmTx (cb) {
-        // var amountUsd = parseFloat(txFormatService.formatToUSD(null, txp.amount))
-        // if (amountUsd <= CONFIRM_LIMIT_USD) { return cb() }
-
-        var message = gettextCatalog.getString('Sending {{amountStr}} from your {{name}} account', {
-          amountStr: tx.amountStr,
-          name: account.name
-        })
-        var okText = gettextCatalog.getString('Confirm')
-        var cancelText = gettextCatalog.getString('Cancel')
-        popupService.showConfirm(null, message, okText, cancelText, function (ok) {
-          return cb(!ok)
-        })
-      }
-
       function doSend () {
         ongoingProcess.set('sendingTx', true, onSendStatusChange)
         profileService.send(txp, function (err) {
@@ -338,27 +321,31 @@ angular.module('canoeApp.controllers').controller('confirmController', function 
     })
     $state.go('tabs.send').then(function () {
       $ionicHistory.clearHistory()
-      addressbookService.get($scope.tx.toAddress, function (err, addr) {
-        // Popup : proposal to add new address to address book, if it's not already there
-        // and if it's not the address of one of wallet accounts
-        if (!addr && !profileService.getAccount($scope.tx.toAddress)) {
-          var title = gettextCatalog.getString('Add to address book?')
-          var msg = gettextCatalog.getString('Do you want to add this new address to your address book?')
-          popupService.showConfirm(title, msg, null, null, function (res) {
-            if (res) {
-              $state.transitionTo('tabs.send.addressbook', {
-                addressbookEntry: $scope.tx.toAddress,
-                toName: $scope.tx.toName,
-                toAlias: $scope.tx.toAlias
-              })
-            } else {
-              $state.transitionTo('tabs.home')
-            }
-          })
-        } else {
-          $state.transitionTo('tabs.home')
-        }
-      })
+      if($scope.tx.isManta) {
+        $state.transitionTo('tabs.home')
+      } else {
+        addressbookService.get($scope.tx.toAddress, function (err, addr) {
+          // Popup : proposal to add new address to address book, if it's not already there
+          // and if it's not the address of one of wallet accounts
+          if (!addr && !profileService.getAccount($scope.tx.toAddress)) {
+            var title = gettextCatalog.getString('Add to address book?')
+            var msg = gettextCatalog.getString('Do you want to add this new address to your address book?')
+            popupService.showConfirm(title, msg, null, null, function (res) {
+              if (res) {
+                $state.transitionTo('tabs.send.addressbook', {
+                  addressbookEntry: $scope.tx.toAddress,
+                  toName: $scope.tx.toName,
+                  toAlias: $scope.tx.toAlias
+                })
+              } else {
+                $state.transitionTo('tabs.home')
+              }
+            })
+          } else {
+            $state.transitionTo('tabs.home')
+          }
+        })
+      }
     })
   }
 })

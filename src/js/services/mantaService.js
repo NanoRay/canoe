@@ -123,7 +123,6 @@ O+dbxo9YqCeAzbna
             $log.debug("Got Payment Request");
             var paymentRequest = JSON.parse(payload)
             var paymentRequestMessage = JSON.parse(paymentRequest.message)
-            $log.debug("request message pure, signature", paymentRequest.message, paymentRequest.signature)
             for (var i = 0; i < paymentRequestMessage.destinations.length; i++) {
               if (paymentRequestMessage.destinations[i].crypto_currency === "NANO") {
                 if (verifySignature(paymentRequest.message,paymentRequest.signature)) {
@@ -134,7 +133,8 @@ O+dbxo9YqCeAzbna
                     error: null,
                     account: paymentRequestMessage.destinations[i].destination_address,
                     amount: amount,
-                    message: paymentRequestMessage
+                    message: paymentRequestMessage,
+                    merchant: paymentRequestMessage.merchant
                   }
                   $log.debug("Returning from MantaWallet");
                   $log.debug(paymentDetails)
@@ -203,7 +203,7 @@ O+dbxo9YqCeAzbna
       if (results.length < 2) return null;
       host = results[1]
       sessionID = results[results.length-1]
-      port = results.length === 3 ? parseInt(results[1]) : 11883
+      port = results.length === 3 ? parseInt(results[1]) : 80 // TODO: Determine if this is the best default port or if we should default to MQTTWS standard 11883
       $log.debug("Initalizing a new MQTT Connection")
       mqtt = new Paho.MQTT.Client(host,port,"canoeNanoWallet")
       mqtt.onConnectionLost = onConnectionLost

@@ -1,6 +1,6 @@
 'use strict'
 /* global angular chrome */
-angular.module('canoeApp.services').factory('openURLService', function ($rootScope, $ionicHistory, $document, $log, $state, platformInfo, lodash, profileService, incomingData, appConfigService) {
+angular.module('canoeApp.services').factory('openURLService', function ($rootScope, $ionicHistory, $document, $log, $state, platformInfo, lodash, profileService, incomingData, nfcService, appConfigService) {
   var root = {}
 
   var handleOpenURL = function (args) {
@@ -61,6 +61,11 @@ angular.module('canoeApp.services').factory('openURLService', function ($rootSco
         // All URL protocols plus bare accounts
         if (pathData.match(/^(xrb:|nano:|canoe:|xrb_|nano_)/) !== null) {
           $log.debug('Nano or Canoe URL found')
+          handleOpenURL({
+            url: pathData
+          })
+        } else if (pathData.match(/^(manta:)/) !== null) {
+          $log.debug('Manta URL found')
           handleOpenURL({
             url: pathData
           })

@@ -34,15 +34,12 @@ angular.module('canoeApp.services').factory('incomingData', function ($log, $sta
       return decodeURIComponent(results[2].replace(/\+/g, ' '))
     }
 
-    function goSend (addr, amount, message, alias, isManta) {
+    function goSend (addr, amount, message, toName, toAlias, isManta) {
       $state.go('tabs.send', {}, {
         'reload': true,
         'notify': $state.current.name !== 'tabs.send'
       })
-      var toName = null
-      if (typeof alias !== 'undefined' && alias !== null) {
-        toName = '@' + alias
-      }
+
       // Timeout is required to enable the "Back" button
       $timeout(function () {
         if (amount) {
@@ -52,7 +49,7 @@ angular.module('canoeApp.services').factory('incomingData', function ($log, $sta
             toName: toName,
             description: message,
             isManta: isManta,
-            toAlias: alias,
+            toAlias: toAlias,
             fromAddress: fromAddress
           })
         } else {
@@ -90,9 +87,9 @@ angular.module('canoeApp.services').factory('incomingData', function ($log, $sta
         // } else {
           if (code.params.amount) {
             $log.debug('Go send ' + JSON.stringify(code))
-            goSend(code.account, code.params.amount, code.params.message, null, code.params.isManta)
+            goSend(code.account, code.params.amount, code.params.message, code.name, code.alias, code.params.isManta)
           } else {
-            goToAmountPage(code.account, null, fromAddress)
+            goToAmountPage(code.account, code.alias, fromAddress)
           }
         // }
         return cb(null, code)
@@ -134,7 +131,7 @@ angular.module('canoeApp.services').factory('incomingData', function ($log, $sta
     })
   }
 
-  function goToAmountPage (toAddress, toAlias, fromAddress) {
+  function goToAmountPage (toAddress, toName, toAlias, fromAddress) {
     $state.go('tabs.send', {}, {
       'reload': true,
       'notify': $state.current.name !== 'tabs.send'

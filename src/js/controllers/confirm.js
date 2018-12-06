@@ -117,6 +117,7 @@ angular.module('canoeApp.controllers').controller('confirmController', function 
       toColor: data.stateParams.toColor,
       txp: {}
     }
+    $scope.isManta = tx.isManta
     $scope.accounts = profileService.getAccounts()
     $scope.toAddress = data.stateParams.toAddress
     $scope.fromAddress = data.stateParams.fromAddress
@@ -217,10 +218,14 @@ angular.module('canoeApp.controllers').controller('confirmController', function 
   }
 
   function setButtonText () {
-    if (isCordova && !isWindowsPhoneApp) {
-      $scope.buttonText = gettextCatalog.getString('Slide to send')
+    if($scope.isManta) {
+      $scope.buttonText = gettextCatalog.getString('Pay via Manta')
     } else {
-      $scope.buttonText = gettextCatalog.getString('Click to send')
+      if (isCordova && !isWindowsPhoneApp) {
+        $scope.buttonText = gettextCatalog.getString('Slide to send')
+      } else {
+        $scope.buttonText = gettextCatalog.getString('Click to send')
+      }
     }
   }
 

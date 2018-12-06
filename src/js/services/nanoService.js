@@ -565,6 +565,7 @@ angular.module('canoeApp.services')
               conn.disconnect()
             } else {
               code.account = response.account
+              code.name = response.merchant.name
               code.params = {
                 amount: response.amount,
                 message: response.message,

@@ -272,7 +272,7 @@ module.exports = function (grunt) {
           'CFBundleURLTypes': [
             {
               'CFBundleURLName': 'URI Handler',
-              'CFBundleURLSchemes': ['nano', 'canoe']
+              'CFBundleURLSchemes': ['nano', 'canoe', 'xrb', 'manta']
             }
           ]
         }

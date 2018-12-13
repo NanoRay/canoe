@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="391012" id="io.getcanoe.canoe" ios-CFBundleVersion="1.0.1" version="1.0.1">
-    <name>Canoe</name>
+<widget android-versionCode="1000001" id="io.appia.canoe" ios-CFBundleVersion="1.0.1" version="1.0.1">
+    <name>Appia Canoe</name>
     <description>
-      Canoe Nano Wallet
+      Appia Canoe Nano Wallet
     </description>
     <author email="goran.krampe@gmail.com" href="https://getcanoe.io">
         Göran Krampe
@@ -105,9 +105,10 @@
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-plugin-qrscanner" spec="git+https://github.com/gokr/cordova-plugin-qrscanner.git" />
     <plugin name="cordova-plugin-customurlscheme" spec="^4.3.0">
-        <variable name="URL_SCHEME" value="nano" />
+        <variable name="URL_SCHEME" value="manta" />
         <variable name="SECOND_URL_SCHEME" value="xrb" />
         <variable name="THIRD_URL_SCHEME" value="canoe" />
+        <variable name="FOURTH_URL_SCHEME" value="nano" />
     </plugin>
     <plugin name="cordova-plugin-ionic-webview" spec="^1.2.1" />
     <plugin name="cordova-custom-config" spec="^5.0.2" />
